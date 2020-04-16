@@ -1,0 +1,32 @@
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(8e-4,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_8e-4.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(9e-4,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_9e-4.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(1e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_1e-3.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(2e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_2e-3.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(3e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_3e-3.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(4e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_4e-3.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(5e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_5e-3.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(6e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_6e-3.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(7e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_7e-3.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(8e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_8e-3.csv');exit"
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "alpha_est_function(9e-3,'allTimeSerieslambda_1to5yoyo1_05xtbe_05bme_50xlamp_o2high.txt','logEst_50lamp_alpha_9e-3.csv');exit"
