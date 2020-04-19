@@ -1,0 +1,21 @@
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(1e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(3e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(4e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(5e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(6e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(7e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(8e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(9e-4);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(1e-3);exit"
