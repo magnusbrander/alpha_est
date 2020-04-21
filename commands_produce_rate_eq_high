@@ -1,0 +1,40 @@
+
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(1.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(3e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(3.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(4e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(4.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(5.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(6e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(6.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(7e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(7.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(8e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(8.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(9e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(9.5e-3);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(1e-2);exit"
+
