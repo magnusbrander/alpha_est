@@ -32,7 +32,7 @@ cutCountsTrue = zeros(1,length(disTimeInt));
 
 % Generate many cumulative max time series
 parfor n=1:statsNr
-    n
+    
     [timeSeriesObs,timeSeriesTrue,visibleCuts] = generate_sim_timeseries_image(...
         alpha,constVal);
     
@@ -56,8 +56,8 @@ varCutCountsTrue = var(cutCountsTrue,1);
 rateEqObs = gradient(avgCutCountsObs,constVal.timeResolution);
 rateEqTrue = gradient(avgCutCountsTrue,constVal.timeResolution);
 
-smoothRateEqObs = smoothdata(rateEqObs,'movmean',10);
-smoothRateEqTrue = smoothdata(rateEqTrue,'movmean',10);
+smoothRateEqObs = conv(rateEqObs,ones(1,10)/10,'same');
+smoothRateEqTrue = conv(rateEqTrue,ones(1,10)/10,'same');
 
 % Save all the simulated properties in a struct before returning
 simulatedData.avgCutCountsObs = avgCutCountsObs;
@@ -77,17 +77,17 @@ simulatedData.nrVisibleCuts = nrVisibleCuts;
 % Analytical rate
 rateEqExact = 2*alpha*constVal.L*(1-exp(-alpha*constVal.frayingDist.*disTimeInt));
 
-
-figure; hold on; box on;
-plot(disTimeInt,rateEqObs,'k.-');
-plot(disTimeInt,rateEqTrue,'r.-');
-plot(disTimeInt,smoothRateEqObs,'g--')
-plot(disTimeInt,smoothRateEqTrue,'b--')
-plot(disTimeInt,rateEqExact,'m--')
-xlabel('time')
-ylabel('r(t)')
-legend('raw obs','raw true','smooth obs','smooth true','analytical')
-title(strcat('alpha = ', num2str(alpha)));
+% 
+% figure; hold on; box on;
+% plot(disTimeInt,rateEqObs,'k.-');
+% plot(disTimeInt,rateEqTrue,'r.-');
+% plot(disTimeInt,smoothRateEqObs,'g--')
+% plot(disTimeInt,smoothRateEqTrue,'b--')
+% plot(disTimeInt,rateEqExact,'m--')
+% xlabel('time')
+% ylabel('r(t)')
+% legend('raw obs','raw true','smooth obs','smooth true','analytical')
+% title(strcat('alpha = ', num2str(alpha)));
 
 
 

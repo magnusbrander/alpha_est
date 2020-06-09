@@ -1,6 +1,8 @@
-function produce_rate_equations(alpha,startInd,stopInd)
+%function produce_rate_equations(alpha,startInd,stopInd)
 
-alpha
+alpha = 2e-3
+startInd = 1
+stopInd = 4
 
 % Specify needed constants 
 constVal.L = 48490; %[basepairs]
@@ -29,7 +31,7 @@ statNr = abs(stopInd-startInd)+1;
 
 import rate_function.empirical_rate_equation_image;
 
-tic;
+
 % Simulate the time series
 simRateEq = empirical_rate_equation_image(alpha,constVal,statNr);
 
@@ -43,7 +45,7 @@ save(['rate_equations/',filename],'simRateEq');
 
 fprintf(strcat('Completed simulation for alpha=',num2str(alpha)))
 fprintf('\n')
-t = toc
 
 
-end
+
+%end
