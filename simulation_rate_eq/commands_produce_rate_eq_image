@@ -1,9 +1,27 @@
 
 
-nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,1,4);exit"
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,1,40);exit"
 
-nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,5,8);exit"
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,41,80);exit"
 
-nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,9,12);exit"
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,81,120);exit"
 
-nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,13,16);exit"
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,121,160);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,161,200);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,201,240);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,241,280);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,281,320);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,321,360);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,361,400);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,401,440);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,441,480);exit"
+
+nice -n 19 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,481,520);exit"
