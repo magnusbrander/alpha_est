@@ -3,6 +3,7 @@ function output = image_segmentation_pragmatic(image, sigma, userLowLim)
 import segementation_util.walk_dist_calc;
 import segementation_util.edge_score;
 import segementation_util.mol_filt;
+import util.imbinarize_custom;
 
 % Filter image with LoG filter
 n = ceil(6*sigma);
@@ -17,7 +18,7 @@ logim = imfilter(image,filt);
 
 
 % Find zero crossing contours
-thedges = imbinarize(logim,0);
+thedges = imbinarize_custom(logim,0);
 [B,L] = bwboundaries(thedges,'holes');
 
 
