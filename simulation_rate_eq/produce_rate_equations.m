@@ -1,4 +1,4 @@
-function produce_rate_equations(alpha,startInd,stopInd)
+function produce_rate_equations(alpha,statNr,indx)
 
 alpha 
 %startInd = 1
@@ -27,7 +27,7 @@ expNrCuts = 40;
 constVal.maxTime = sqrt(expNrCuts/(alpha^2*constVal.L * constVal.frayingDist));
 
 % Set the number of time series to be simulated in order to create the empirical r(t) function 
-statNr = abs(stopInd-startInd)+1;
+%statNr = abs(stopInd-startInd)+1;
 
 import rate_function.empirical_rate_equation_image;
 
@@ -37,7 +37,7 @@ simRateEq = empirical_rate_equation_image(alpha,constVal,statNr);
 
 % Create filename 
 filename = strcat('simulated_rate_equation_alpha_image_',num2str(alpha),...
-    '_',num2str(startInd),'_',num2str(stopInd),'.mat');
+    '_',num2str(statNr),'_',num2str(indx),'.mat');
 
 % Save file
 save(['rate_equations/',filename],'simRateEq');
