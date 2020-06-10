@@ -1,0 +1,340 @@
+#!/usr/bin/env python3
+
+from queue import Queue
+from threading import Thread, Event, Lock, current_thread
+from collections import Counter
+from multiprocessing.connection import Listener
+from datetime import datetime
+import sys, os, signal, shlex, subprocess
+
+class RemoteThread():
+	# Queue of tasks to be executed
+	queue = Queue()
+
+	# If this is set, process is NOT paused and running should continue
+	globalPause = Event()
+
+	# If this is set, all threads should exit after finishing the current running process
+	globalStop = Event()
+	
+	# If this is True, all threads should terminate their process and exit
+	globalKill = False
+
+	# Lock for controlling stdout to avoid overlapping outputs
+	outputLock = Lock()
+
+	# Dictionary of all threads, keyed by hosts
+	threads = {}
+
+	def __init__(self, host, parent):
+		self.isRunning = False
+		self.host = host
+		self.parent = parent
+		self.setStatus("Initializing")
+		self.thread = Thread(target=self.threadworker)
+		self.command = None
+		self.waittime = 1
+		if host in RemoteThread.threads:
+			RemoteThread.threads[host].append(self)
+		else:
+			RemoteThread.threads[host] = [self]
+
+	# thread will execute this function (take tasks from queue and run over ssh)
+	def threadworker(self):
+		self.command = None
+		RemoteThread.globalPause.wait()
+		while not self.everything_done():
+			try:
+				# Stop if received stop signal
+				if RemoteThread.globalStop.is_set():
+					self.terminate(None)
+				# Block if stack is empty
+				if RemoteThread.queue.empty():
+					self.waittime = 5
+					self.wait("Done")
+					continue
+				# Wait if received pause signal
+				if not RemoteThread.globalPause.is_set():
+					self.setStatus("Paused")
+					RemoteThread.globalPause.wait(5)
+					self.waittime = 1
+					continue
+				# Wait if host CPU usage is above threshold
+				self.setStatus("Checking host CPU usage")
+				cpuusage = self.hostCPU()
+				if cpuusage > 400:
+					self.wait("Waiting politely for cpu")
+					continue
+				# Wait if host free memory is under threshold
+				self.setStatus("Checking host memory usage")
+				freememory = self.hostMemory()
+				if freememory < 5000:
+					self.wait("Waiting politely for memory")
+					continue
+				# Take new job
+				if RemoteThread.queue.empty():
+					continue
+				self.setStatus("Grabbing new job")
+				self.command = RemoteThread.queue.get()
+				# ... and execute
+				self.setStatus("Working. Job: "+self.command.strip())
+				joboutput = self.run(self.command)
+				# ... and print
+				self.setStatus("Printing. Job: "+self.command.strip())
+				with RemoteThread.outputLock:
+					print(joboutput, end='')
+					sys.stdout.flush()
+				# Repeat
+				self.setStatus("Finished job")
+				self.command = None
+				RemoteThread.queue.task_done()
+				del joboutput
+				self.waittime = 1
+			# when error is related to ssh or during cpu/memory check
+			except ConnectionError as e:
+				self.terminate(e)
+			except RuntimeError as e:
+				print(e, file=sys.stderr)
+				sys.stderr.flush()
+		self.terminate(None)
+
+	def everything_done(self):
+		anyWorkers = any(map(lambda host: any(map(lambda thread: thread.status.startswith("Working"), RemoteThread.threads[host])), RemoteThread.threads))
+		return (RemoteThread.queue.empty() and not anyWorkers) or RemoteThread.globalKill or RemoteThread.globalStop.is_set() or not self.parent.is_alive()
+
+	def start(self):
+		self.isRunning = True
+		self.thread.setDaemon(False)
+		self.thread.start()
+
+	# Wait. Internal self.waittime is incremented each time up to a max of 5 min.
+	def wait(self, status=None):
+		if status is not None:
+			self.setStatus(status + " ("+str(self.waittime)+"s)")
+		if self.command is not None:
+			RemoteThread.queue.put(self.command)
+			self.command = None
+			RemoteThread.queue.task_done()
+		self.waittime = max(1, min(2*self.waittime, 5*60))
+		RemoteThread.globalStop.wait(self.waittime)
+
+	def terminate(self, error):
+		self.isRunning = False
+		if self.command is not None:
+			RemoteThread.queue.put(self.command)
+			self.command = None
+			RemoteThread.queue.task_done()
+		if error is None:
+			self.setStatus("Terminated.")
+		else:
+			self.setStatus("Terminated. Error: " + str(error))
+			print("Connection to ",self.host," terminated. Error: ", str(error), file=sys.stderr)
+			sys.stderr.flush()
+		# Terminate program if all threads are terminated
+		if self.everything_done():
+			RemoteThread.globalStop.set()
+			if not RemoteThread.queue.empty():
+				os.kill(os.getpid(), signal.SIGINT) # send signal to interrupt main thread
+		else:
+			anyRunning = any(map(lambda host: any(map(lambda thread: thread.isRunning, RemoteThread.threads[host])), RemoteThread.threads))
+			if not anyRunning:
+				RemoteThread.globalStop.set()
+				print("Cannot finish queue because all connections were terminated.", file=sys.stderr)
+				os.kill(os.getpid(), signal.SIGINT) # send signal to interrupt main thread
+		sys.exit(0) #only exit this thread
+
+	# Just run this command (remote)
+	# try to identify any stderr outputs as either a ConnectionError (ssh) or RuntimeError (anything else)
+	def run(self, code):
+		preparedCommand = RemoteThread.prepareCommand(code)
+		with subprocess.Popen(["ssh", "-tt", "-o", "BatchMode yes", self.host, preparedCommand], stdout=subprocess.PIPE, stderr=subprocess.PIPE) as connection:
+			try:
+				while True:
+					if RemoteThread.globalKill or not self.parent.is_alive():
+						sys.exit(0)
+					else:
+						try:
+							out, err = connection.communicate(timeout=5)
+							break
+						except subprocess.TimeoutExpired:
+							pass
+				out = out.decode()
+				err = err.decode()
+				if not err or err.startswith("Connection to"): # connection to [hostname] closed. is just the end statement
+					if out.startswith("The authenticity of host"): # host key not recognized, must log in interactively and select "yes"
+						raise ConnectionError(out)
+					if out.startswith("@@@@@@@@@@@@@@@@@@@@@@@"): # "warning" box when host key changed, must remove key and re-authenticate host
+						raise ConnectionError(out)
+					else:
+						return out
+				elif err.startswith("ssh"): # most ssh errors start with ssh:, e.g. host not fount
+					raise ConnectionError(err)
+				elif err.startswith("Permission denied (publickey,keyboard-interactive)."): # ssh asked for password
+					raise ConnectionError(err)
+				elif err.startswith("Killed by signal 2"): # user-generated signal killed the process, terminate thread
+					sys.exit(0)
+				else:
+					raise RuntimeError(err)
+			except (KeyboardInterrupt, SystemExit):
+				connection.kill() # think this actually happens automatically
+				self.terminate(None)
+
+	# Get the CPU used by host, in sum of % of core usage
+	# This value is not averaged over time so may be very inaccurate
+	def hostCPU(self):
+		try:
+#			result = self.run("ps -A -o pcpu | tail -n+2 | paste -sd+ | bc")
+			parts = self.run("ps -A -o pcpu | tail -n+2")
+			result = 0
+			for part in parts.splitlines():
+				result = result + float(part)
+			return result
+		except RuntimeError as e:
+			raise ConnectionError(e) from e
+		except ValueError as e:
+			raise ConnectionError("Cannot read CPU usage") from e
+
+	# Get free memory (including buffer) on host in Mb
+	def hostMemory(self):
+		try:
+			result = self.run(r'free -m | grep "buffers/cache" | grep -oP "(?<=\s)\S.*" | grep -oP "(?<=\s)\S.*" | grep -oP "(?<=\s)\S.*"')
+			return float(result)
+		except RuntimeError as e:
+			raise ConnectionError(e) from e
+		except ValueError as e:
+			raise ConnectionError("Cannot read memory usage") from e
+
+	def setStatus(self, status):
+		self.status = status
+		self.statusTime = datetime.now()
+
+	def printTime(self):
+		delta = datetime.now() - self.statusTime
+		result = ""
+		hours = delta.seconds//(60*60)
+		minutes = (delta.seconds-hours*60*60)//60
+		seconds = (delta.seconds-hours*60*60-minutes*60)//1
+		if (delta.days > 0):
+			result = result + str(delta.days) + "d,"
+		if (delta.days > 0 or hours > 0):
+			result = result + str(hours) + "h,"
+		if (delta.days > 0 or hours > 0 or minutes > 0):
+			result = result + str(minutes) + "m,"
+		result = result + str(seconds) + "s"
+		return result
+
+	def printStatus(self):
+		return self.printTime() + " ago:\t" + self.status
+
+	@staticmethod
+	def report():
+		result = ""
+		for host in RemoteThread.threads:
+			for thread in RemoteThread.threads[host]:
+				result = result + host + ":\t" + thread.printStatus().strip() + "\n"
+		return result.strip()
+
+	def remainingJobs():
+		result = ""
+		try:
+			for job in list(RemoteThread.queue.queue):
+				result = result + "\n" + job.strip()
+		except Exception as e:
+			result = result + str(e)
+		return result
+	
+
+	# Get status of all threads
+	@staticmethod
+	def totalstatus():
+		result = ""
+		for host in RemoteThread.threads:
+			result = result + host + ":\n"
+			for thread in RemoteThread.threads[host]:
+				result = result + "    " + thread.printStatus() + "\n"
+		result = result + "\nRemaining jobs:"
+		try:
+			for job in RemoteThread.queue.queue:
+				result = result + "\n" + job.strip()
+		except Exception as e:
+			result = result + str(e)
+		return result
+
+	# Convert a job to an actual console command to be run on a remote machine
+	@staticmethod
+	def prepareCommand(code):
+		withcd = "cd {}; {}".format(shlex.quote(os.getcwd()), code)
+		withnice = "ionice -c 3 nice -n 19 bash -c {}".format(shlex.quote(withcd))
+		return withnice
+
+## Read list of hosts to send tasks to
+hosts=sys.argv[1:]
+if len(hosts) == 0:
+	print(("Must supply host names to distribute processes to.\n"
+	       "Sample usage:\n"
+	       "	for i in $(seq 1 10); do echo \"echo $i - \$(hostname)\"; done | distribute $(machines)"
+	      ), file=sys.stderr)
+	sys.exit(1)
+
+## Create listener to enable another process to request status of parallel processes
+def listenerworker():
+	try:
+		address = ('localhost', 6000)
+		listener = Listener(address, authkey=b'soverysecret')
+		while True:
+			connection = listener.accept()
+			msg = connection.recv()
+			if msg == "list":
+				connection.send(RemoteThread.remainingJobs())
+			elif msg == "pause":
+				connection.send("Execution paused" if RemoteThread.globalPause.is_set() else "Did nothing; execution already on pause")
+				RemoteThread.globalPause.clear()
+			elif msg == "unpause":
+				connection.send("Execution unpaused" if not RemoteThread.globalPause.is_set() else "Did nothing; execution already running")
+				RemoteThread.globalPause.set()
+			elif msg == "stop":
+				connection.send("Execusion stopping" if not RemoteThread.globalStop.is_set() else "Did nothing; execution already stopping")
+				RemoteThread.globalStop.set()
+				RemoteThread.globalPause.set()
+			elif msg == "kill":
+				connection.send("Killing running processes... (2sec)")
+				RemoteThread.globalKill = True
+				RemoteThread.globalStop.set()
+				RemoteThread.globalPause.set()
+			elif msg == "deafen":
+				connection.send("Listening thread shutting down")
+				break
+			else:
+				connection.send(RemoteThread.report())	
+			connection.close()
+		connection.close()
+		listener.close()
+	except OSError:
+		print(("Could not establish distribute-query listener.\n"
+   		       "Probably, another distribute instance is already running.\n"
+		       "Starting without listener. To avoid this message, run this on another computer or use `distribute-query deafen`. This will free up the listener socket for another distribute."
+		      ),file=sys.stderr)
+
+myListenerThread = Thread(target=listenerworker)
+myListenerThread.setDaemon(True)
+myListenerThread.start()
+
+## Define multiple threads that will execute commands in parallel
+for host in hosts:
+	thread = RemoteThread(host, current_thread())
+	thread.start()
+
+## Fill up queue with tasks
+for command in sys.stdin:
+	RemoteThread.queue.put(command)
+		
+## Set global pause to false
+RemoteThread.globalPause.set()
+
+## Finish program only when all commands were executed
+try:
+	RemoteThread.queue.join()
+except (KeyboardInterrupt, SystemExit):
+	RemoteThread.globalKill = True
+	RemoteThread.globalStop.set()
+	RemoteThread.globalPause.set()

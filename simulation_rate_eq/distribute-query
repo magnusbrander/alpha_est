@@ -1,0 +1,31 @@
+#!/home/roth/adriaan/bin/python3
+
+from multiprocessing.connection import Client
+import sys
+
+if list(sys.argv[1:]) not in [["status"],["list"],["pause"],["unpause"],["stop"],["kill"],["deafen"]]:
+	print("distribute-query [command] communicates with a running distribute process to print the current status.\n"
+		  "Note: effects of a command may take up to five seconds to process.\n"
+		  "Available commands:\n"
+		  "	- help:   	Print this message.\n"
+		  "	- status: 	List all currently running threads and their status.\n"
+		  "	- list:  	List all jobs currently in the queue. Typical usage: `distribute-query list | wc -l`.\n"
+		  "	- pause:   	Pause the distribute process. Any running jobs will continue, but the thread will enter a sleep state after the current job finishes.\n"
+		  "	- unpause: 	Continue all paused threads.\n"
+		  "	- stop:   	Stop the distribute process. Any running jobs will continue, but the thread will terminate after the current job finishes. The process ends when all threads are stopped.\n"
+		  "	- kill:   	Stop all currently running threads immediately. Intermediate output will be thrown away.\n"
+		  "	- deafen: 	Does nothing to the running jobs but kills the subprocess that listens to distribute-query commands. This frees up the address for a new distribute-process. There is no way to restart the listener."
+		 )
+else:
+	try:
+		address = ('localhost', 6000)
+		connection = Client(address, authkey=b'soverysecret')
+		connection.send(sys.argv[1])
+		print(connection.recv())
+	except ConnectionRefusedError as e:
+		print("No distribute process responded.")
+		sys.exit(1)
+	except Exception as e:
+		print(type(e), file=sys.stderr)
+		print(e, file=sys.stderr)
+		sys.exit(1)

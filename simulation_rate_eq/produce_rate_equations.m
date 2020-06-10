@@ -1,8 +1,8 @@
-%function produce_rate_equations(alpha,startInd,stopInd)
+function produce_rate_equations(alpha,startInd,stopInd)
 
-alpha = 2e-3
-startInd = 1
-stopInd = 4
+alpha 
+%startInd = 1
+%stopInd = 4
 
 % Specify needed constants 
 constVal.L = 48490; %[basepairs]
@@ -21,7 +21,7 @@ constVal.gain = 254;
 
 
 % Set expexted number of cuts to be simulated
-expNrCuts = 40;
+expNrCuts = 50;
 
 % Calculate the needed simulation time 
 constVal.maxTime = sqrt(expNrCuts/(alpha^2*constVal.L * constVal.frayingDist));
@@ -36,7 +36,7 @@ import rate_function.empirical_rate_equation_image;
 simRateEq = empirical_rate_equation_image(alpha,constVal,statNr);
 
 % Create filename 
-filename = strcat('simulated_rate_equation_alpha_image',num2str(alpha),...
+filename = strcat('simulated_rate_equation_alpha_image_',num2str(alpha),...
     '_',num2str(startInd),'_',num2str(stopInd),'.mat');
 
 % Save file
@@ -48,4 +48,4 @@ fprintf('\n')
 
 
 
-%end
+end
