@@ -21,7 +21,7 @@ constVal.gain = 254;
 
 
 % Set expexted number of cuts to be simulated
-expNrCuts = 50;
+expNrCuts = 40;
 
 % Calculate the needed simulation time 
 constVal.maxTime = sqrt(expNrCuts/(alpha^2*constVal.L * constVal.frayingDist));

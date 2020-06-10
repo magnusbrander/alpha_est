@@ -1,27 +1,7 @@
 
 
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,1,4);exit"
+nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,1,8);exit"
 
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,5,8);exit"
+nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,9,16);exit"
 
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,9,12);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,13,16);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,17,20);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,21,24);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,25,28);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,29,32);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,33,36);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,37,40);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,41,44);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,45,48);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,49,52);exit"
+nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,17,24);exit"
