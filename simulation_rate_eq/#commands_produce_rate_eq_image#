@@ -1,8 +1,0 @@
-
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,8,1);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r "produce_rate_equations(2e-3,8,2);exit"
-
-nice -n 18 /mnt/server/local/new/bin/matlab -nodisplay -nosplash -nodesktop -r
-"produce_rate_equations(2e-3,8,3);exit"
