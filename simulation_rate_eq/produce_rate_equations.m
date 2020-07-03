@@ -8,7 +8,7 @@ alpha
 constVal.L = 48490; %[basepairs]
 constVal.pixelSize = 160; %[nanometers]
 constVal.frayingDist = 1; %[basepairs]
-constVal.diffConst = 628e3; %[nanometers^2 /s]
+constVal.diffConst = 67e3; %[nanometers^2 /s]
 constVal.salt = 0.5;
 constVal.intialNickDensity = 0;
 constVal.timeResolution = 0.1;
@@ -40,7 +40,7 @@ filename = strcat('simulated_rate_equation_alpha_image_',num2str(alpha),...
     '_',num2str(statNr),'_',num2str(indx),'.mat');
 
 % Save file
-save(['rate_equations/',filename],'simRateEq');
+save(['rate_equations_lowD/',filename],'simRateEq');
 
 
 fprintf(strcat('Completed simulation for alpha=',num2str(alpha)))
