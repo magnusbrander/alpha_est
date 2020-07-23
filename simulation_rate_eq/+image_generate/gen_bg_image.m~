@@ -4,15 +4,12 @@ function bgIm = gen_bg_image(dim1, dim2,lambda,g)
 %
 % FUNCTION: bgIm = gen_bg_image(dim1, dim2,lambda,g)
 %
-% Description: Generates a background image with Poisson distributed 
-% number of photons in each pixel with mean "lambda". The photons are converted 
-% through a EMCCD camera noise model with gain "g" described in 
-% "https://doi.org/10.1038/s41592-019-0364-4"
+% Description: Generates a background image according to the specied mean
+% number of arriving photons "lambda" and the gaing "g" 
 %
-% Input: dim1 = number of rows, dim2 = number of columns, lambda = average
-% number of photons for all pixels, g = gain 
+% Input: 
 %
-% Output: bgIm = the background image 
+% Output:  
 %
 % ########################################################################
 
