@@ -87,11 +87,10 @@ for i=1:length(timeInstances)
     % Loop through all cut times to find out which one we are located at
     for j=1:length(allCutTimes)
         
+        timeSeriesTrue(i) = j;
         currCutTime = allCutTimes(j);
         
-       if currCutTime < currTime
-           timeSeriesTrue(i) = j;
-       else
+       if currCutTime >= currTime
            break;
        end
         
