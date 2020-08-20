@@ -73,18 +73,6 @@ simulatedData.timeInstances = disTimeInt;
 rateEqExact = 2*alpha*constVal.L*(1-exp(-alpha*constVal.frayingDist.*disTimeInt));
 
 
-figure; hold on; box on;
-plot(disTimeInt,rateEqObs,'k.-');
-plot(disTimeInt,rateEqTrue,'r.-');
-plot(disTimeInt,smoothRateEqObs,'g--')
-plot(disTimeInt,smoothRateEqTrue,'b--')
-plot(disTimeInt,rateEqExact,'m--')
-xlabel('time')
-ylabel('r(t)')
-legend('raw obs','raw true','smooth obs','smooth true','analytical')
-title(strcat('alpha = ', num2str(alpha)));
-
-
 
 
 

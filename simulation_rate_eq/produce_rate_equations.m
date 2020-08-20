@@ -24,7 +24,7 @@ constVal.gain = 254;
 expNrCuts = 50;
 
 % Calculate the needed simulation time 
-constVal.maxTime = max(13,sqrt(expNrCuts/(alpha^2*constVal.L * constVal.frayingDist)));
+constVal.maxTime = floor(max(13,sqrt(expNrCuts/(alpha^2*constVal.L * constVal.frayingDist)))/constVal.timeResolution);
 
 % Set the number of time series to be simulated in order to create the empirical r(t) function 
 %statNr = abs(stopInd-startInd)+1;

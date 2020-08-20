@@ -18,7 +18,7 @@ function simulatedData = empirical_rate_equation_image(...
 import timeseries_folder.generate_sim_timeseries_image;
 import diffusion_simulation.compute_time_instances;
 import util.modified_gradient;
-import util.movemean_custom;
+
 
 
 
@@ -57,8 +57,8 @@ varCutCountsTrue = var(cutCountsTrue,1);
 rateEqObs = modified_gradient(avgCutCountsObs,constVal.timeResolution);
 rateEqTrue = modified_gradient(avgCutCountsTrue,constVal.timeResolution);
 
-smoothRateEqObs = movemean_custom(rateEqObs,10);
-smoothRateEqTrue = movemean_custom(rateEqTrue,10);
+smoothRateEqObs = conv(rateEqObs,ones(1,10)/10,'same');
+smoothRateEqTrue = conv(rateEqTrue,ones(1,10)/10,'same');
 
 % Save all the simulated properties in a struct before returning
 simulatedData.avgCutCountsObs = avgCutCountsObs;
