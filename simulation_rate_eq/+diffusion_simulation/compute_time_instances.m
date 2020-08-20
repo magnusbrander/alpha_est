@@ -1,4 +1,4 @@
-function timeInstances = compute_time_instances(varargin)
+function timeInstances = compute_time_instances(dt,maxTime,startTime)
 
 % ########################################################################
 %
@@ -13,58 +13,62 @@ function timeInstances = compute_time_instances(varargin)
 %
 % ########################################################################
 
-n = length(varargin);
-switch n
-    
-    case 2
-        
-        timeResolution = varargin{1};
-        maxTime = varargin{2};
-        startTime = 0.5*timeResolution;
-        
-    case 3
-        
-        timeResolution = varargin{1};
-        maxTime = varargin{2};
-        startTime = varargin{3}+timeResolution;
-        
-end
+
+timeInstances = (startTime+dt):dt:maxTime;
 
 
-
-t = startTime;
-count = 1;
-
-% Iterate through time interval to know how many instances there are
-while t <= maxTime - timeResolution
-    
-    t = t + timeResolution;
-    count = count + 1;   
-    
-    
-end
-
-% Create vector for all instances
-timeInstances = zeros(1,count);
-timeInstances(1) = startTime;
-
-% Fill the timeInstance vector with all the time instance
-if count>1
-    for n=2:count
-        
-        timeInstances(n) = timeInstances(n-1) + timeResolution;
-                
-    end
-end
-
-% If the time resolution and max time does not allow for an evenly spaced
-% interval we modify the length of the last interval
-
-if timeInstances(end) < maxTime
-    timeInstances(end+1) = maxTime;
-end
-
-
+% n = length(varargin);
+% switch n
+%     
+%     case 2
+%         
+%         timeResolution = varargin{1};
+%         maxTime = varargin{2};
+%         startTime = 0.5*timeResolution;
+%         
+%     case 3
+%         
+%         timeResolution = varargin{1};
+%         maxTime = varargin{2};
+%         startTime = varargin{3}+timeResolution;
+%         
+% end
+% 
+% 
+% 
+% t = startTime;
+% count = 1;
+% 
+% % Iterate through time interval to know how many instances there are
+% while t <= maxTime - timeResolution
+%     
+%     t = t + timeResolution;
+%     count = count + 1;   
+%     
+%     
+% end
+% 
+% % Create vector for all instances
+% timeInstances = zeros(1,count);
+% timeInstances(1) = startTime;
+% 
+% % Fill the timeInstance vector with all the time instance
+% if count>1
+%     for n=2:count
+%         
+%         timeInstances(n) = timeInstances(n-1) + timeResolution;
+%                 
+%     end
+% end
+% 
+% % If the time resolution and max time does not allow for an evenly spaced
+% % interval we modify the length of the last interval
+% 
+% if timeInstances(end) < maxTime
+%     timeInstances(end+1) = maxTime;
+% end
+% 
+% 
 
 
 end
