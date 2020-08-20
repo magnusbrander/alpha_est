@@ -40,7 +40,7 @@ filename = strcat('simulated_rate_equation_alpha_image_',num2str(alpha),...
     '_',num2str(statNr),'_',num2str(indx),'.mat');
 
 % Save file
-save(['rate_equations_lowD/',filename],'simRateEq');
+save(['rate_equations_extra_lowD/',filename],'simRateEq');
 
 
 fprintf(strcat('Completed simulation for alpha=',num2str(alpha)))
