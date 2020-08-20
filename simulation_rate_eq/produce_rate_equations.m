@@ -8,7 +8,7 @@ alpha
 constVal.L = 48490; %[basepairs]
 constVal.pixelSize = 160; %[nanometers]
 constVal.frayingDist = 1; %[basepairs]
-constVal.diffConst = 67e3; %[nanometers^2 /s]
+constVal.diffConst = 64e3; %[nanometers^2 /s]
 constVal.salt = 0.5;
 constVal.intialNickDensity = 0;
 constVal.timeResolution = 0.1;

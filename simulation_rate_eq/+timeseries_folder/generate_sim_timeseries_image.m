@@ -76,6 +76,8 @@ for i = 1:length(timeSeriesObs)
 
 end
 
+
+% Convert all cut times to the resolution given by timeInstances
 timeSeriesTrue = zeros(1,length(allDetectedMol));
 allCutTimes = cutInfo.cutTimes;
 
